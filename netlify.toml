@@ -1,5 +1,5 @@
 [[redirects]]
-from = "/*"
+from = "/api/*"
 to = "https://user-sys.herokuapp.com/api/:splat"
 status = 200
 force = true
