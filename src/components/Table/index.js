@@ -6,8 +6,9 @@ import { FaUserEdit, FaTrashAlt, FaPlus } from "assets/icons";
 import { Action, TableWrapper, Th } from "./Table.styles";
 
 import TableHeadCell from "./TableHeadCell";
+import { Spinner } from "components/Spinner";
 
-const Table = ({ data }) => {
+const Table = ({ data, isLoading }) => {
   const setShowModal = useStore((state) => state.setShowModal);
   const setSelectedUser = useStore((state) => state.setSelectedUser);
 
@@ -30,30 +31,41 @@ const Table = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((d) => (
-            <tr key={d._id}>
-              <td>{d.firstName}</td>
-              <td>{d.lastName}</td>
-              <td>{d.username}</td>
-              <td>{d.email}</td>
-              <td>{d.status}</td>
-              <td className="actions">
-                <Action as={Link} to={`/edit/${d._id}`} title="Edit user">
-                  <FaUserEdit className="edit" />
-                </Action>
-                <Action onClick={() => handleDelete(d._id)} title="Delete user">
-                  <FaTrashAlt className="delete" />
-                </Action>
-                <Action
-                  as={Link}
-                  to={`/assign/${d._id}`}
-                  title="Assign permissions"
-                >
-                  <FaPlus className="assign" />
-                </Action>
+          {isLoading ? (
+            <tr>
+              <td colspan="6">
+                <Spinner />
               </td>
             </tr>
-          ))}
+          ) : (
+            data?.map((d) => (
+              <tr key={d._id}>
+                <td>{d.firstName}</td>
+                <td>{d.lastName}</td>
+                <td>{d.username}</td>
+                <td>{d.email}</td>
+                <td>{d.status}</td>
+                <td className="actions">
+                  <Action as={Link} to={`/edit/${d._id}`} title="Edit user">
+                    <FaUserEdit className="edit" />
+                  </Action>
+                  <Action
+                    onClick={() => handleDelete(d._id)}
+                    title="Delete user"
+                  >
+                    <FaTrashAlt className="delete" />
+                  </Action>
+                  <Action
+                    as={Link}
+                    to={`/assign/${d._id}`}
+                    title="Assign permissions"
+                  >
+                    <FaPlus className="assign" />
+                  </Action>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </TableWrapper>
